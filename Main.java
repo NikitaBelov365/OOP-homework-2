@@ -10,19 +10,19 @@ public class Main {
         listQueue.add(0);
         LinkedList<Integer> listMarket = new LinkedList<>();
         listMarket.add(0);
-        HashMap<String, Integer> market = new HashMap<>();
-        market.put("Meat", 25);
-        market.put("Fish", 25);
-        market.put("Cheese", 25);
-        System.out.println(market);
-        Market marketClass = new Market();
-        marketClass.update(market);
+        HashMap<String, Integer> goods = new HashMap<>();
+        goods.put("Meat", 25);
+        goods.put("Fish", 25);
+        goods.put("Cheese", 25);
+        System.out.println(goods);
+        Market marketClass = new Market(goods);
+        marketClass.update(goods);
         marketClass.enterMarket(listMarket);
         marketClass.enteringQueue(listQueue);
-        String order = marketClass.takeOrder(market);
-        marketClass.giveOrder(market, order);
+        String order = marketClass.takeOrder(goods);
+        marketClass.giveOrder(goods, order);
         marketClass.leavingQueue(listQueue);
         marketClass.leavingMarket(listMarket);
-        marketClass.update(market);
+        marketClass.update(goods);
     }
 }

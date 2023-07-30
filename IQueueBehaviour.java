@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public interface IQueueBehaviour {
+public interface IQueueBehaviour extends IMarketBehavior {
 
     void enteringQueue(LinkedList<Integer> list);
     void leavingQueue(LinkedList<Integer> list);
