@@ -1,17 +1,24 @@
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 
-public class Market implements IQueueBehaviour {
+public class Market implements IQueueBehaviour, IShowingPriceFunctional {
 
+    private final Scanner scanner;
     private HashMap<String, Integer> data;
 
     public Market(HashMap<String, Integer> goods) {
         this.data = goods;
+        this.scanner = new Scanner(System.in);
     }
 
+
+    public int getVolume() {
+        int result = 0;
+        for (int value : data.values()) {
+            result += value;
+        }
+        return result;
+    }
 
     public void enterMarket(LinkedList<Integer> list) {
         System.out.println("Welcome customer! Choose your destiny");
@@ -45,15 +52,14 @@ public class Market implements IQueueBehaviour {
     @Override
     public String takeOrder(HashMap<String, Integer> market) {
         System.out.println("What do you want?");
-        try (Scanner scan = new Scanner(System.in)) {
-            String order = scan.nextLine();
-            if (market.containsKey(order)) {
-                return order;
-            } else {
-                return null;
-            }
+        String order = scanner.nextLine();
+        if (market.containsKey(order)) {
+            return order;
+        } else {
+            return null;
         }
     }
+
 
     @Override
     public void giveOrder(HashMap<String, Integer> market, String order) {
@@ -61,20 +67,49 @@ public class Market implements IQueueBehaviour {
             System.out.println("Sorry, we don't have your order");
         } else {
             System.out.println("How many items do you need?");
-            try (Scanner scan = new Scanner(System.in)) {
-                String input = scan.nextLine();
-                int amm = Integer.parseInt(input);
+            String input = scanner.nextLine(); // Используйте тот же Scanner для ввода
+            int amm = Integer.parseInt(input);
 
-                if (amm > market.get(order)) {
-                    System.out.println("We don't have that many");
-                } else {
-                    int x = market.get(order) - amm;
-                    market.replace(order, x);
-                    System.out.println("Here you are!");
-                }
+            if (amm > market.get(order)) {
+                System.out.println("We don't have that many");
+            } else {
+                int x = market.get(order) - amm;
+                market.replace(order, x);
+                System.out.println("Here you are!");
             }
         }
     }
+
+    @Override
+    public void price(String order) {
+        Random rnd = new Random();
+        int price = rnd.nextInt(5, 15);
+        System.out.println(order + " = " + price + " RUB");
+    }
+
+    public void closeScanner() {
+        scanner.close();
+    }
+
+    public void comparatorSort() {
+        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(data.entrySet());
+        Collections.sort(entryList, new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> entry1, Map.Entry<String, Integer> entry2) {
+                return entry1.getValue().compareTo(entry2.getValue());
+            }
+        });
+
+        LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : entryList) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        for (Map.Entry<String, Integer> entry : sortedMap.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
+    }
+
 }
 
 
